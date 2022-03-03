@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mNotifButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 sendNotification();
-
             }
         });
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                cancelNotification();
             }
         });
 
@@ -80,5 +78,15 @@ public class MainActivity extends AppCompatActivity {
         Notification notif = built.build();
         mNotificationManager.notify(NOTIF_ID, notif);
 
+        mNotifButton.setEnabled(false);
+        mCancelButton.setEnabled(true);
+        mUpdateButton.setEnabled(true);
+    }
+    private void cancelNotification(){
+        mNotificationManager.cancel(NOTIF_ID);
+
+        mNotifButton.setEnabled(true);
+        mCancelButton.setEnabled(false);
+        mUpdateButton.setEnabled(false);
     }
 }
