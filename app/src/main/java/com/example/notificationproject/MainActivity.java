@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -70,12 +71,17 @@ public class MainActivity extends AppCompatActivity {
         Intent contentIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingContentIntent = PendingIntent.getActivity(getApplicationContext(),NOTIF_ID, contentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
+        String GUIDE_URL = "https://developer.android.com/design/patterns/notifications.html";
+        Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GUIDE_URL));
+        PendingIntent pendingLearnMoreIntent = PendingIntent.getActivity(getApplicationContext(), NOTIF_ID,learnMoreIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder built = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
         built.setContentTitle("You've been notified");
         built.setContentText("This is notification text");
         built.setSmallIcon(R.drawable.ic_notification);
         built.setContentIntent(pendingContentIntent);
+        built.setPriority(NotificationCompat.PRIORITY_HIGH);
+        built.addAction(R.drawable.ic_notification, "Learn More", pendingLearnMoreIntent);
 
         Notification notif = built.build();
         mNotificationManager.notify(NOTIF_ID, notif);
@@ -109,5 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
         Notification notif = built.build();
         mNotificationManager.notify(NOTIF_ID, notif);
+
+        mNotifButton.setEnabled(false);
+        mCancelButton.setEnabled(true);
+        mUpdateButton.setEnabled(false);
     }
 }
