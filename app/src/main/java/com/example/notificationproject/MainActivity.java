@@ -9,6 +9,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                updateNotification();
             }
         });
         mCancelButton.setOnClickListener(new View.OnClickListener() {
@@ -88,5 +90,24 @@ public class MainActivity extends AppCompatActivity {
         mNotifButton.setEnabled(true);
         mCancelButton.setEnabled(false);
         mUpdateButton.setEnabled(false);
+    }
+
+    private void updateNotification(){
+        Intent contentIntent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pendingContentIntent = PendingIntent.getActivity(getApplicationContext(),NOTIF_ID, contentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationCompat.Builder built = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
+        built.setContentTitle("You've been notified");
+        built.setContentText("This is notification text");
+        built.setSmallIcon(R.drawable.ic_notification);
+        built.setContentIntent(pendingContentIntent);
+        built.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Bitmap mascotBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mascot_1);
+        built.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(mascotBitmap).setBigContentTitle("The Notification has been updated"));
+
+        Notification notif = built.build();
+        mNotificationManager.notify(NOTIF_ID, notif);
     }
 }
